@@ -6,6 +6,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Loader2, LogOut, Building, Briefcase, Users, Target, Milestone } from 'lucide-react';
 import type { Database } from '@/integrations/supabase/types';
 import { useToast } from '@/hooks/use-toast';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
 type BusinessProfile = Database['public']['Tables']['business_profiles']['Row'];
@@ -15,6 +17,13 @@ const ProfilePage: React.FC = () => {
   const [businessProfile, setBusinessProfile] = useState<BusinessProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const [editOpen, setEditOpen] = useState(false);
+  const [editName, setEditName] = useState(profile?.full_name || '');
+  const [editAvatar, setEditAvatar] = useState<File | null>(null);
+  const [editAvatarPreview, setEditAvatarPreview] = useState(profile?.avatar_url || '');
+  const [editPassword, setEditPassword] = useState('');
+  const [editPasswordConfirm, setEditPasswordConfirm] = useState('');
+  const [editLoading, setEditLoading] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -66,6 +75,48 @@ const ProfilePage: React.FC = () => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
+  const handleEditProfile = async () => {
+    setEditLoading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('User not found');
+      // Update profile
+      const updates: any = { full_name: editName };
+      let avatarUrl = '';
+      if (editAvatar) {
+        const fileExt = editAvatar.name.split('.').pop();
+        const fileName = `${user.id}/avatar.${fileExt}`;
+        const { error: uploadError } = await supabase.storage.from('avatars').upload(fileName, editAvatar, { upsert: true });
+        if (uploadError) throw uploadError;
+        const { data } = supabase.storage.from('avatars').getPublicUrl(fileName);
+        avatarUrl = data.publicUrl;
+        updates.avatar_url = avatarUrl;
+      }
+      await supabase.from('profiles').update(updates).eq('id', user.id);
+      // Update password if provided
+      if (editPassword) {
+        if (editPassword !== editPasswordConfirm) throw new Error('Passwords do not match');
+        const { error: pwError } = await supabase.auth.updateUser({ password: editPassword });
+        if (pwError) throw pwError;
+      }
+      toast({ title: 'Profile updated', description: 'Your profile has been updated.' });
+      setEditOpen(false);
+      window.location.reload();
+    } catch (error: any) {
+      toast({ title: 'Update failed', description: error.message, variant: 'destructive' });
+    } finally {
+      setEditLoading(false);
+    }
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setEditAvatar(file);
+      setEditAvatarPreview(URL.createObjectURL(file));
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -89,6 +140,7 @@ const ProfilePage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-8">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-end mb-4">
+          <Button onClick={() => setEditOpen(true)} variant="secondary" size="sm" className="mr-2">Edit Profile</Button>
           <Button onClick={handleSignOut} variant="outline" size="sm">
             <LogOut className="h-4 w-4 mr-2" />
             Sign Out
@@ -159,6 +211,36 @@ const ProfilePage: React.FC = () => {
             )}
           </CardContent>
         </Card>
+
+        <Dialog open={editOpen} onOpenChange={setEditOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit Profile</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <label className="block mb-1 font-medium">Full Name</label>
+                <Input value={editName} onChange={e => setEditName(e.target.value)} />
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">Avatar</label>
+                <Input type="file" accept="image/*" onChange={handleAvatarChange} />
+                {editAvatarPreview && <img src={editAvatarPreview} alt="Avatar Preview" className="w-16 h-16 rounded-full mt-2" />}
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">New Password</label>
+                <Input type="password" value={editPassword} onChange={e => setEditPassword(e.target.value)} placeholder="Leave blank to keep current password" />
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">Confirm Password</label>
+                <Input type="password" value={editPasswordConfirm} onChange={e => setEditPasswordConfirm(e.target.value)} placeholder="Confirm new password" />
+              </div>
+              <Button className="w-full" onClick={handleEditProfile} disabled={editLoading}>
+                {editLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save Changes'}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

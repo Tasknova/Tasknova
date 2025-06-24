@@ -7,6 +7,7 @@ import AuthPage from './pages/AuthPage';
 import BusinessOnboarding from './components/onboarding/BusinessOnboarding';
 import ProfilePage from './pages/Profile';
 import NotFound from './pages/NotFound';
+import HomePage from './pages/HomePage';
 
 function App() {
   return (
@@ -34,6 +35,15 @@ function App() {
           />
           
           <Route 
+            path="/home"
+            element={
+              <AuthGuard>
+                <HomePage />
+              </AuthGuard>
+            }
+          />
+          
+          <Route 
             path="/profile"
             element={
               <AuthGuard>
@@ -48,7 +58,7 @@ function App() {
               <AuthGuard>
                 {/* This will be protected. AuthGuard decides where to go. */}
                 {/* By default, let's aim for profile, guard will redirect if needed. */}
-                <Navigate to="/profile" replace />
+                <Navigate to="/home" replace />
               </AuthGuard>
             }
           />

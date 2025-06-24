@@ -128,8 +128,8 @@ const BusinessOnboarding: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Button onClick={() => navigate('/profile')} className="w-full">
-              Go to Your Profile
+            <Button onClick={() => navigate('/home')} className="w-full">
+              Go to Home
             </Button>
             <Button onClick={handleSignOut} variant="outline" className="w-full">
               <LogOut className="h-4 w-4 mr-2" />
