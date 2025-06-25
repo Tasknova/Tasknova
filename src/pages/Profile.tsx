@@ -3,11 +3,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Loader2, LogOut, Building, Briefcase, Users, Target, Milestone } from 'lucide-react';
+import { Loader2, LogOut, Building, Briefcase, Users, Target, Milestone, Home } from 'lucide-react';
 import type { Database } from '@/integrations/supabase/types';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { useNavigate } from 'react-router-dom';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
 type BusinessProfile = Database['public']['Tables']['business_profiles']['Row'];
@@ -18,12 +19,13 @@ const ProfilePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const [editOpen, setEditOpen] = useState(false);
-  const [editName, setEditName] = useState(profile?.full_name || '');
+  const [editName, setEditName] = useState('');
   const [editAvatar, setEditAvatar] = useState<File | null>(null);
-  const [editAvatarPreview, setEditAvatarPreview] = useState(profile?.avatar_url || '');
+  const [editAvatarPreview, setEditAvatarPreview] = useState('');
   const [editPassword, setEditPassword] = useState('');
   const [editPasswordConfirm, setEditPasswordConfirm] = useState('');
   const [editLoading, setEditLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -38,6 +40,10 @@ const ProfilePage: React.FC = () => {
           .single();
         if (profileError) throw profileError;
         setProfile(profileData);
+        if (profileData) {
+          setEditName(profileData.full_name || '');
+          setEditAvatarPreview(profileData.avatar_url || '');
+        }
 
         const { data: businessData, error: businessError } = await supabase
           .from('business_profiles')
@@ -80,19 +86,23 @@ const ProfilePage: React.FC = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('User not found');
-      // Update profile
-      const updates: any = { full_name: editName };
-      let avatarUrl = '';
+      
+      const updates: { full_name: string; avatar_url?: string } = { full_name: editName };
+      
       if (editAvatar) {
         const fileExt = editAvatar.name.split('.').pop();
         const fileName = `${user.id}/avatar.${fileExt}`;
         const { error: uploadError } = await supabase.storage.from('avatars').upload(fileName, editAvatar, { upsert: true });
+        
         if (uploadError) throw uploadError;
+        
         const { data } = supabase.storage.from('avatars').getPublicUrl(fileName);
-        avatarUrl = data.publicUrl;
-        updates.avatar_url = avatarUrl;
+        updates.avatar_url = `${data.publicUrl}?t=${new Date().getTime()}`;
       }
-      await supabase.from('profiles').update(updates).eq('id', user.id);
+      
+      const { error: updateError } = await supabase.from('profiles').update(updates).eq('id', user.id);
+      if (updateError) throw updateError;
+      
       // Update password if provided
       if (editPassword) {
         if (editPassword !== editPasswordConfirm) throw new Error('Passwords do not match');
@@ -139,8 +149,12 @@ const ProfilePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-8">
       <div className="max-w-4xl mx-auto">
-        <div className="flex justify-end mb-4">
-          <Button onClick={() => setEditOpen(true)} variant="secondary" size="sm" className="mr-2">Edit Profile</Button>
+        <div className="flex justify-end mb-4 space-x-2">
+          <Button onClick={() => navigate('/')} variant="outline" size="sm">
+            <Home className="h-4 w-4 mr-2" />
+            Home
+          </Button>
+          <Button onClick={() => setEditOpen(true)} variant="secondary" size="sm">Edit Profile</Button>
           <Button onClick={handleSignOut} variant="outline" size="sm">
             <LogOut className="h-4 w-4 mr-2" />
             Sign Out

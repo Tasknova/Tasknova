@@ -32,6 +32,7 @@ const BusinessOnboarding: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
 
   const [formData, setFormData] = useState<BusinessFormData>({
     businessName: '',
@@ -59,6 +60,10 @@ const BusinessOnboarding: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('business-onboarding-form', JSON.stringify(formData));
   }, [formData]);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
+  }, []);
 
   const handleReferralSourceChange = (source: ReferralSource, checked: boolean) => {
     setFormData(prev => ({
@@ -135,6 +140,24 @@ const BusinessOnboarding: React.FC = () => {
               <LogOut className="h-4 w-4 mr-2" />
               Sign Out
             </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-100 p-4">
+        <Card className="w-full max-w-md text-center">
+          <CardHeader>
+            <CardTitle className="text-2xl text-primary">Email Confirmed!</CardTitle>
+            <CardDescription>
+              Your email is confirmed! Please log in to continue onboarding.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button onClick={() => navigate('/auth')} className="w-full">Go to Login</Button>
           </CardContent>
         </Card>
       </div>

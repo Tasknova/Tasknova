@@ -16,19 +16,78 @@ const HomePage = () => {
         <Button onClick={handleProfileClick}>Profile</Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {[...Array(6)].map((_, i) => (
-          <Card key={i}>
-            <CardHeader>
-              <img src="/placeholder.svg" alt={`Placeholder ${i + 1}`} className="rounded-t-lg" />
-              <CardTitle>Card Title {i + 1}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>
-                This is a description for card {i + 1}. You can put more detailed information here.
-              </CardDescription>
-            </CardContent>
-          </Card>
-        ))}
+        <Card onClick={() => navigate('/lead-generation')} className="cursor-pointer hover:shadow-lg transition-shadow">
+          <CardHeader>
+            <img src="/placeholder.svg" alt="Placeholder 1" className="rounded-t-lg" />
+            <CardTitle>🎯 Get 100 Verified Leads – Only $20!</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CardDescription>
+            Kickstart your growth with our ready-to-use Lead Generation Pipeline. Instantly access 100 high-quality leads tailored to your niche — all for just $20. No setup hassle, no fluff — just real, targeted prospects to fuel your outreach, campaigns, or sales funnel, and help you grow faster.
+            </CardDescription>
+            <Button className="mt-4">Check this Out</Button>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <img src="/placeholder.svg" alt="Placeholder 2" className="rounded-t-lg" />
+            <CardTitle>🧩 Agency OS Template – Run Your Agency Like a Pro</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CardDescription>
+            Run your agency with clarity using the Agency OS Template — a powerful, all-in-one workspace to manage clients, track projects, and streamline operations. Built for digital and service agencies that want scalable systems, smarter workflows, and everything in one organized space.
+            </CardDescription>
+            <Button className="mt-4">Click Me</Button>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <img src="/placeholder.svg" alt="Placeholder 3" className="rounded-t-lg" />
+            <CardTitle>📚 Notion Templates – Plug & Play Productivity Tools</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CardDescription>
+            Unlock focus and flow with Tasknova's premium Notion Templates Library. From task managers to CRMs and habit trackers, each template is designed to simplify life, organize your work, and boost productivity — whether you're a freelancer, startup, or creator ready to level up.
+            </CardDescription>
+            <Button className="mt-4">Click Me</Button>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <img src="/placeholder.svg" alt="Placeholder 4" className="rounded-t-lg" />
+            <CardTitle>Card Title 4</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CardDescription>
+              This is a description for card 4. You can put more detailed information here.
+            </CardDescription>
+            <Button className="mt-4">Click Me</Button>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <img src="/placeholder.svg" alt="Placeholder 5" className="rounded-t-lg" />
+            <CardTitle>Card Title 5</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CardDescription>
+              This is a description for card 5. You can put more detailed information here.
+            </CardDescription>
+            <Button className="mt-4">Click Me</Button>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <img src="/placeholder.svg" alt="Placeholder 6" className="rounded-t-lg" />
+            <CardTitle>Card Title 6</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CardDescription>
+              This is a description for card 6. You can put more detailed information here.
+            </CardDescription>
+            <Button className="mt-4">Click Me</Button>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

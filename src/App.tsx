@@ -8,6 +8,7 @@ import BusinessOnboarding from './components/onboarding/BusinessOnboarding';
 import ProfilePage from './pages/Profile';
 import NotFound from './pages/NotFound';
 import HomePage from './pages/HomePage';
+import LeadGenerationPage from './pages/LeadGenerationPage';
 
 function App() {
   return (
@@ -48,6 +49,15 @@ function App() {
             element={
               <AuthGuard>
                 <ProfilePage />
+              </AuthGuard>
+            }
+          />
+
+          <Route 
+            path="/lead-generation"
+            element={
+              <AuthGuard>
+                <LeadGenerationPage />
               </AuthGuard>
             }
           />

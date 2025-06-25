@@ -98,7 +98,7 @@ const AuthForm: React.FC = () => {
           email: emailForm.email,
           password: emailForm.password,
           options: {
-            emailRedirectTo: `${window.location.origin}/home`,
+            emailRedirectTo: `${window.location.origin}/onboarding`,
             data: {
               full_name: emailForm.fullName,
               // The avatar_url will be updated after the user is created

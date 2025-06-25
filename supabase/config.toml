@@ -1,1 +1,61 @@
-project_id = "eyacutmyzxnwedyjqiom"
+project_id = "auth-flow-onboard"
+
+[api]
+port = 54321
+schemas = ["public", "storage", "graphql"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 15
+
+[studio]
+port = 54323
+
+[auth]
+# This is the local JWT secret. DO NOT use this in production.
+jwt_secret = "super-secret-jwt-token-with-at-least-32-characters-long"
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["https://auth-flow-onboard.lovable.app/**", "https://id-preview--85f4d502-ff6a-4f85-81e8-4e7d58cbdf80.lovable.app/**", "https://preview--auth-flow-onboard.lovable.app/**", "http://localhost:8000"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+enable_manual_linking = true
+enable_signup = true
+enable_anonymous_sign_ins = false
+minimum_password_length = 6
+
+[auth.mfa]
+max_enrolled_factors = 10
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+[auth.mfa.phone]
+enroll_enabled = false
+verify_enabled = false
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+secure_password_change = false
+max_frequency = "1m0s"
+otp_length = 6
+otp_expiry = 86400
+
+[auth.sms]
+enable_signup = false
+max_frequency = "1m0s"
+template = "{{ .Code }}"
+[functions.send-to-n8n]
+enabled = true
+verify_jwt = true
+import_map = "./functions/send-to-n8n/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/send-to-n8n/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/send-to-n8n/*.html" ]
