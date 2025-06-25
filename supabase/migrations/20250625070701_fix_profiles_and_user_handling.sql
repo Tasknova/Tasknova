@@ -1,7 +1,13 @@
--- Add full_name and avatar_url to the profiles table
-ALTER TABLE public.profiles
-ADD COLUMN full_name TEXT,
-ADD COLUMN avatar_url TEXT;
+-- Add full_name and avatar_url to the profiles table if they do not exist
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='profiles' AND column_name='full_name') THEN
+        ALTER TABLE public.profiles ADD COLUMN full_name TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='profiles' AND column_name='avatar_url') THEN
+        ALTER TABLE public.profiles ADD COLUMN avatar_url TEXT;
+    END IF;
+END$$;
 
 -- Drop the existing function and trigger to redefine them
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;

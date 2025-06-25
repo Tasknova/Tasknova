@@ -77,6 +77,36 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      },
+      lead_requests: {
+        Row: {
+          id: string;
+          user_id: string | null;
+          user_email: string;
+          user_name: string | null;
+          lead_description: string;
+          created_at: string;
+          status: string;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string | null;
+          user_email: string;
+          user_name?: string | null;
+          lead_description: string;
+          created_at?: string;
+          status?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string | null;
+          user_email?: string;
+          user_name?: string | null;
+          lead_description?: string;
+          created_at?: string;
+          status?: string;
+        };
+        Relationships: [];
       }
     }
     Views: {
