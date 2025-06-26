@@ -3,10 +3,21 @@ import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
-import { Tables } from '@/integrations/supabase/types';
 import Navbar from '@/components/ui/navbar';
 
-type Template = Tables<'notion_templates'>;
+type Template = {
+  template_id: string;
+  template_name: string;
+  template_description: string;
+  price_usd: number;
+  cover_photo: string;
+  face_photo: string;
+  image_1: string;
+  image_2: string;
+  image_3: string;
+  image_4: string;
+  created_at: string;
+};
 
 const reviews = [
   { user_name: 'Alice', review_text: 'Amazing template! Super useful.', star_rating: 5 },
@@ -63,7 +74,7 @@ const NotionTemplateDetailPage: React.FC = () => {
         </div>
         <Card className="mb-8">
           <CardHeader>
-            <img src={template.cover_photo} alt={template.template_name ?? ''} className="rounded-lg w-full h-64 object-cover mb-4" />
+            <img src={template.cover_photo} alt={template.template_name ?? ''} className="rounded-lg w-full h-96 object-cover mb-4" />
             <CardTitle className="text-3xl">{template.template_name}</CardTitle>
             <CardDescription className="text-xl font-semibold">${template.price_usd}</CardDescription>
           </CardHeader>
