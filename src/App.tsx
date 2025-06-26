@@ -9,6 +9,9 @@ import ProfilePage from './pages/Profile';
 import NotFound from './pages/NotFound';
 import HomePage from './pages/HomePage';
 import LeadGenerationPage from './pages/LeadGenerationPage';
+import NotionTemplatesPage from './pages/NotionTemplatesPage';
+import NotionTemplateDetailPage from './pages/NotionTemplateDetailPage';
+import AdminNotionTemplateUpload from './pages/AdminNotionTemplateUpload';
 
 function App() {
   return (
@@ -58,6 +61,33 @@ function App() {
             element={
               <AuthGuard>
                 <LeadGenerationPage />
+              </AuthGuard>
+            }
+          />
+
+          <Route 
+            path="/notion-templates"
+            element={
+              <AuthGuard>
+                <NotionTemplatesPage />
+              </AuthGuard>
+            }
+          />
+
+          <Route 
+            path="/notion-templates/:template_id"
+            element={
+              <AuthGuard>
+                <NotionTemplateDetailPage />
+              </AuthGuard>
+            }
+          />
+
+          <Route 
+            path="/admin/notion-template-upload"
+            element={
+              <AuthGuard>
+                <AdminNotionTemplateUpload />
               </AuthGuard>
             }
           />

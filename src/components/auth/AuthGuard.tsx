@@ -116,11 +116,16 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
   }
 
   const isAuthPage = location.pathname === '/auth';
+  const isAdminPage = location.pathname.startsWith('/admin');
 
   if (session) {
     // User is logged in
     if (isAuthPage) {
       return <Navigate to="/" replace />;
+    }
+
+    if (isAdminPage) {
+        return <>{children}</>;
     }
 
     // User is on a protected route

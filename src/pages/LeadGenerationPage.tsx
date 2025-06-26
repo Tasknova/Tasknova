@@ -9,6 +9,7 @@ import { Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import type { Database } from '@/integrations/supabase/types';
+import Navbar from '@/components/ui/navbar';
 
 const LeadGenerationPage = () => {
   const [description, setDescription] = useState('');
@@ -160,109 +161,112 @@ const LeadGenerationPage = () => {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <main className="flex-grow container mx-auto p-4 md:p-8">
-        <h1 className="text-4xl font-bold text-center mb-8">🎯 Get 100 Verified Leads – Only $20!</h1>
+    <>
+      <Navbar />
+      <div className="flex flex-col min-h-screen">
+        <main className="flex-grow container mx-auto p-4 md:p-8">
+          <h1 className="text-4xl font-bold text-center mb-8">🎯 Get 100 Verified Leads – Only $20!</h1>
 
-        <div className="max-w-2xl mx-auto">
-          {submitted ? (
-            <div className="p-8 text-center bg-white rounded-lg shadow">
-              <h2 className="text-2xl font-semibold mb-4">Thank you!</h2>
-              <p className="text-lg">Please wait while we generate your leads.<br/>The leads will be sent to your email. It may take upto 25 to 30 mins to generate the leads</p>
-            </div>
-          ) : (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-center">Describe Your Ideal Leads</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <Textarea
-                  placeholder="Examples:&#10;- Marketing agency owners or founders in India&#10;- Sales Managers in Pune with team size > 10&#10;- Marketing agencies with 20-40 employees in India"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className="min-h-[150px] text-base"
-                />
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="terms"
-                    checked={termsAccepted}
-                    onCheckedChange={(checked) => setTermsAccepted(!!checked)}
+          <div className="max-w-2xl mx-auto">
+            {submitted ? (
+              <div className="p-8 text-center bg-white rounded-lg shadow">
+                <h2 className="text-2xl font-semibold mb-4">Thank you!</h2>
+                <p className="text-lg">Please wait while we generate your leads.<br/>The leads will be sent to your email. It may take upto 25 to 30 mins to generate the leads</p>
+              </div>
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-center">Describe Your Ideal Leads</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <Textarea
+                    placeholder="Examples:&#10;- Marketing agency owners or founders in India&#10;- Sales Managers in Pune with team size > 10&#10;- Marketing agencies with 20-40 employees in India"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="min-h-[150px] text-base"
                   />
-                  <label
-                    htmlFor="terms"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    I accept the <a href="#" className="underline">Terms & Privacy Policy</a>
-                  </label>
-                </div>
 
-                {paymentStatus !== 'success' && (
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="terms"
+                      checked={termsAccepted}
+                      onCheckedChange={(checked) => setTermsAccepted(!!checked)}
+                    />
+                    <label
+                      htmlFor="terms"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      I accept the <a href="#" className="underline">Terms & Privacy Policy</a>
+                    </label>
+                  </div>
+
+                  {paymentStatus !== 'success' && (
+                    <Button 
+                      onClick={handlePayment} 
+                      className="w-full" 
+                      disabled={paymentStatus === 'processing' || !termsAccepted || !description.trim()}
+                    >
+                      {paymentStatus === 'processing' ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        'Pay to Continue'
+                      )}
+                    </Button>
+                  )}
+
                   <Button 
-                    onClick={handlePayment} 
                     className="w-full" 
-                    disabled={paymentStatus === 'processing' || !termsAccepted || !description.trim()}
+                    disabled={!canGenerateLeads || isGenerating} 
+                    onClick={handleGenerateLeads}
                   >
-                    {paymentStatus === 'processing' ? (
+                    {isGenerating ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Processing...
+                        Generating...
                       </>
                     ) : (
-                      'Pay to Continue'
+                      'Generate Leads'
                     )}
                   </Button>
-                )}
+                </CardContent>
+              </Card>
+            )}
+          </div>
 
-                <Button 
-                  className="w-full" 
-                  disabled={!canGenerateLeads || isGenerating} 
-                  onClick={handleGenerateLeads}
-                >
-                  {isGenerating ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Generating...
-                    </>
-                  ) : (
-                    'Generate Leads'
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-        </div>
+          <section className="mt-16">
+            <h2 className="text-3xl font-bold text-center mb-8">What Our Users Say</h2>
+            <Carousel className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto">
+              <CarouselContent>
+                {reviews.map((review, index) => (
+                  <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                    <div className="p-1">
+                      <Card>
+                        <CardContent className="flex flex-col items-center justify-center p-6 space-y-4">
+                          <p className="text-center">"{review.quote}"</p>
+                          <div className="text-center">
+                            <p className="font-semibold">{review.name}</p>
+                            <p className="text-sm text-muted-foreground">{'⭐'.repeat(review.rating)}</p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </section>
 
-        <section className="mt-16">
-          <h2 className="text-3xl font-bold text-center mb-8">What Our Users Say</h2>
-          <Carousel className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto">
-            <CarouselContent>
-              {reviews.map((review, index) => (
-                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                  <div className="p-1">
-                    <Card>
-                      <CardContent className="flex flex-col items-center justify-center p-6 space-y-4">
-                        <p className="text-center">"{review.quote}"</p>
-                        <div className="text-center">
-                          <p className="font-semibold">{review.name}</p>
-                          <p className="text-sm text-muted-foreground">{'⭐'.repeat(review.rating)}</p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        </section>
-
-      </main>
-      <footer className="w-full text-center p-4">
-        <p>© 2025 All rights reserved.</p>
-      </footer>
-    </div>
+        </main>
+        <footer className="w-full text-center p-4">
+          <p>© 2025 All rights reserved.</p>
+        </footer>
+      </div>
+    </>
   );
 };
 
