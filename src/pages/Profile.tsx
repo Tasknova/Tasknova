@@ -311,47 +311,6 @@ const ProfilePage: React.FC = () => {
               </CardContent>
             </Card>
 
-            <Card className="w-full overflow-hidden shadow-lg mt-8">
-              <CardHeader>
-                <CardTitle>Your Lead Requests</CardTitle>
-                <CardDescription>A history of all your lead generation requests.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {leadRequests.length > 0 ? (
-                  <ul className="space-y-4">
-                    {leadRequests.map((request) => (
-                      <li key={request.id} className="p-4 bg-gray-50 rounded-lg flex justify-between items-center">
-                        <div>
-                          <p className="font-semibold">{request.lead_description}</p>
-                          <p className="text-sm text-gray-500">
-                            Requested on: {new Date(request.created_at).toLocaleString()}
-                          </p>
-                          {request.status?.toLowerCase().startsWith('failed') ? (
-                            <p className="text-sm text-red-500">
-                              Status: Failed. Our team will connect with you.
-                            </p>
-                          ) : (
-                            <p className="text-sm text-gray-500 capitalize">
-                              Status: {request.status || 'Pending'}
-                            </p>
-                          )}
-                        </div>
-                        {request.downloadable_url && (
-                          <Button asChild>
-                            <a href={request.downloadable_url} target="_blank" rel="noopener noreferrer">
-                              Download Leads
-                            </a>
-                          </Button>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-center text-gray-500">You haven't made any lead requests yet.</p>
-                )}
-              </CardContent>
-            </Card>
-
             <Dialog open={businessEditOpen} onOpenChange={setBusinessEditOpen}>
               <DialogContent>
                 <DialogHeader>

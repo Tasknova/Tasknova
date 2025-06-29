@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { Home, Layers, Zap, ShoppingCart } from 'lucide-react';
 
 // Profile context for sharing avatarUrl
 export const ProfileContext = React.createContext<{ avatarUrl?: string } | undefined>(undefined);
 
 const navLinks = [
-  { to: '/home', label: 'Home' },
-  { to: '/lead-generation', label: 'Lead Generation' },
-  { to: '/notion-templates', label: 'Notion Templates' },
+  { to: '/home', label: 'Home', icon: <Home className="inline-block w-5 h-5 mr-1" /> },
+  { to: '/lead-generation', label: 'Lead Generation', icon: <Zap className="inline-block w-5 h-5 mr-1" /> },
+  { to: '/notion-templates', label: 'Notion Templates', icon: <Layers className="inline-block w-5 h-5 mr-1" /> },
+  { to: '/orders', label: 'Your Orders', icon: <Layers className="inline-block w-5 h-5 mr-1" /> },
 ];
 
 const Navbar: React.FC = () => {
@@ -42,19 +44,19 @@ const Navbar: React.FC = () => {
   return (
     <nav className="w-full bg-white border-b shadow-sm mb-6">
       <div className="container mx-auto flex items-center gap-4 py-3 px-4">
-        {/* Navigation links, hide the one for the current page */}
-        {navLinks.map(link =>
-          !location.pathname.startsWith(link.to) && (
-            <Link
-              key={link.to}
-              to={link.to}
-              className={`px-3 py-2 rounded font-medium transition-colors duration-150 text-gray-700 hover:bg-gray-200`}
-            >
-              {link.label}
-            </Link>
-          )
-        )}
-        {/* Profile avatar and Sign Out button on the right, sign out only on /profile */}
+        <Link to="/home" className="mr-4 flex items-center">
+          <img src="/logo2.jpg" alt="Logo" className="w-14 h-14 object-contain" />
+        </Link>
+        {navLinks.filter(link => link.to !== '/orders').map(link => (
+          <Link
+            key={link.to}
+            to={link.to}
+            className={`px-3 py-2 rounded font-medium transition-colors duration-150 text-gray-700 hover:bg-gray-200 flex items-center`}
+          >
+            {link.icon}
+            {link.label}
+          </Link>
+        ))}
         <div className="ml-auto flex flex-row-reverse items-center gap-2">
           <Link to="/profile">
             {avatarUrl ? (
@@ -68,6 +70,12 @@ const Navbar: React.FC = () => {
                 <span>👤</span>
               </div>
             )}
+          </Link>
+          <Link to="/orders">
+            <button className="px-3 py-2 rounded font-medium transition-colors duration-150 text-gray-700 hover:bg-gray-200 border border-gray-200 flex items-center gap-2">
+              <ShoppingCart className="w-5 h-5" />
+              Your Orders
+            </button>
           </Link>
           {location.pathname.startsWith('/profile') && (
             <button

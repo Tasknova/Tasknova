@@ -12,6 +12,7 @@ import LeadGenerationPage from './pages/LeadGenerationPage';
 import NotionTemplatesPage from './pages/NotionTemplatesPage';
 import NotionTemplateDetailPage from './pages/NotionTemplateDetailPage';
 import AdminNotionTemplateUpload from './pages/AdminNotionTemplateUpload';
+import OrdersPage from './pages/OrdersPage';
 
 function App() {
   return (
@@ -88,6 +89,15 @@ function App() {
             element={
               <AuthGuard>
                 <AdminNotionTemplateUpload />
+              </AuthGuard>
+            }
+          />
+
+          <Route 
+            path="/orders"
+            element={
+              <AuthGuard>
+                <OrdersPage />
               </AuthGuard>
             }
           />

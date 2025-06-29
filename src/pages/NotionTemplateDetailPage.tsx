@@ -9,13 +9,11 @@ type Template = {
   template_id: string;
   template_name: string;
   template_description: string;
+  short_description?: string;
   price_usd: number;
   cover_photo: string;
   face_photo: string;
-  image_1: string;
-  image_2: string;
-  image_3: string;
-  image_4: string;
+  categories?: string[];
   created_at: string;
 };
 
@@ -44,6 +42,11 @@ const NotionTemplateDetailPage: React.FC = () => {
         .select('*')
         .eq('template_id', template_id)
         .single();
+      if (data && typeof data.Categories === 'string') {
+        data.categories = data.Categories.split(',').map((cat: string) => cat.trim());
+      } else if (data && Array.isArray(data.Categories)) {
+        data.categories = data.Categories;
+      }
       console.log('Supabase data:', data);
       console.log('Supabase error:', error);
       if (error) {
@@ -68,47 +71,105 @@ const NotionTemplateDetailPage: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto p-4">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">Tasknova Home</h1>
-        </div>
-        <Card className="mb-8">
-          <CardHeader>
-            <img src={template.cover_photo} alt={template.template_name ?? ''} className="rounded-lg w-full h-96 object-cover mb-4" />
-            <CardTitle className="text-3xl">{template.template_name}</CardTitle>
-            <CardDescription className="text-xl font-semibold">${template.price_usd}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <CardDescription className="mb-4">{template.template_description}</CardDescription>
-            <div className="mb-6">
-              <Carousel className="w-full">
-                <CarouselContent>
-                  {[template.image_1, template.image_2, template.image_3, template.image_4].filter((img): img is string => !!img).map((img, idx) => (
-                    <CarouselItem key={idx}>
-                      <img src={img} alt={`Template image ${idx + 1}`} className="rounded-lg h-80 w-2/3 mx-auto object-cover" />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-              </Carousel>
+      <div className="container mx-auto p-8">
+        {/* Top section: Cover photo and right sidebar */}
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Left: Cover photo and template info */}
+          <div className="flex-1 min-w-0">
+            <img
+              src={template.cover_photo}
+              alt={template.template_name ?? ''}
+              className="rounded-lg w-full h-96 md:h-[32rem] object-cover mb-6 shadow-lg"
+            />
+            <div className="flex items-center gap-4 mb-4">
+              <img
+                src="/logo.png"
+                alt="Logo"
+                className="w-16 h-16 rounded-full border-2 border-gray-200 object-cover bg-white shadow"
+              />
+              <div>
+                <h1 className="text-3xl font-bold leading-tight">{template.template_name}</h1>
+                {template.short_description && (
+                  <div className="mt-1 text-base text-blue-700 font-semibold bg-blue-50 rounded px-2 py-1">
+                    {template.short_description}
+                  </div>
+                )}
+                {template.categories && template.categories.length > 0 && (
+                  <div className="mt-1 text-sm text-gray-500">
+                    <span className="font-semibold">Categories:</span> {template.categories.join(', ')}
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="mt-8">
-              <h2 className="text-2xl font-bold mb-4">User Reviews</h2>
-              <div className="flex flex-row gap-4 overflow-x-auto pb-2">
-                {reviews.map((review, idx) => (
-                  <div key={idx} className="min-w-[250px] p-4 bg-gray-50 rounded-lg">
-                    <div className="flex items-center mb-2">
-                      <span className="font-semibold mr-2">{review.user_name}</span>
-                      <span>{'★'.repeat(review.star_rating)}{'☆'.repeat(5 - review.star_rating)}</span>
-                    </div>
-                    <div>{review.review_text}</div>
+            
+          </div>
+          {/* Right: Features/benefits (sidebar) */}
+          <aside className="w-full md:w-96 flex-shrink-0 bg-gray-50 rounded-lg p-6 shadow h-fit">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold">Features & Benefits</h2>
+              <button className="px-6 py-2 bg-black text-white rounded-lg font-semibold text-lg hover:bg-gray-900 transition">
+                Get template (${template.price_usd})
+              </button>
+            </div>
+            
+            <div className="mt-6 text-gray-700 whitespace-pre-line">
+              {template.template_description}
+            </div>
+            {template.categories && template.categories.length > 0 && (
+              <div className="mt-6 flex flex-wrap gap-3">
+                {template.categories.map((cat, idx) => (
+                  <div key={idx} className="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg shadow text-blue-800 font-medium text-sm min-w-[100px] justify-center">
+                    <span>📦</span>
+                    {cat}
                   </div>
                 ))}
               </div>
+            )}
+            {/* Social Media Share Buttons */}
+            <div className="mt-6 flex gap-4">
+              <button
+                className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded shadow"
+                onClick={() => window.open(`https://twitter.com/intent/tweet?text=Check out this Notion template: ${window.location.href}`, '_blank')}
+              >
+                <span>🐦</span> Twitter
+              </button>
+              <button
+                className="flex items-center gap-2 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded shadow"
+                onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`, '_blank')}
+              >
+                <span>📘</span> Facebook
+              </button>
+              <button
+                className="flex items-center gap-2 px-4 py-2 bg-blue-900 hover:bg-blue-950 text-white rounded shadow"
+                onClick={() => window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${window.location.href}`, '_blank')}
+              >
+                <span>💼</span> LinkedIn
+              </button>
             </div>
-          </CardContent>
-        </Card>
+          </aside>
+        </div>
+        {/* Customer Reviews Section */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold mb-4 text-center">Customer Reviews</h2>
+          <div className="flex gap-6 overflow-x-auto pb-2 justify-center">
+            {reviews.map((review, idx) => (
+              <div
+                key={idx}
+                className="min-w-[300px] max-w-xs bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border border-gray-100 hover:shadow-2xl transition-shadow duration-200"
+              >
+                <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-2xl font-bold text-blue-700 mb-2">
+                  {review.user_name.charAt(0)}
+                </div>
+                <div className="font-semibold text-lg mb-1">{review.user_name}</div>
+                <div className="flex items-center text-yellow-500 text-xl mb-2">
+                  {'★'.repeat(review.star_rating)}{'☆'.repeat(5 - review.star_rating)}
+                </div>
+                <div className="text-gray-700 text-center text-base">{review.review_text}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Optionally, reviews or other sections can go here */}
         <footer className="mt-12 text-center text-gray-400">&copy; {new Date().getFullYear()} Tasknova</footer>
       </div>
     </>

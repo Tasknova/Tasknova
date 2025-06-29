@@ -31,21 +31,22 @@ const NotionTemplatesPage: React.FC = () => {
     <>
       <Navbar />
       <div className="container mx-auto p-4">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">Tasknova Home</h1>
-          {/* Footer or nav can be added here if needed */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-center">Notion Templates</h1>
         </div>
-        <h2 className="text-3xl font-bold mb-6">Notion Templates</h2>
         {loading ? <p>Loading...</p> : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {templates.map(template => (
               <Card key={template.template_id} className="flex flex-col justify-between">
                 <CardHeader>
                   <img src={template.face_photo} alt={template.template_name ?? 'Template'} className="rounded-t-lg h-56 object-cover w-full" />
-                  <CardTitle>{template.template_name}</CardTitle>
+                  <div className="flex items-center gap-2 mt-2">
+                    <img src="/logo.png" alt="Logo" className="w-8 h-8 object-contain" />
+                    <CardTitle>{template.template_name}</CardTitle>
+                  </div>
+                  <CardDescription className="text-gray-500 text-sm mt-1">{template.short_description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription>{template.template_description}</CardDescription>
                   <div className="mt-2 font-bold">${template.price_usd}</div>
                   <div className="flex gap-2 mt-4">
                     <Button onClick={() => navigate(`/notion-templates/${template.template_id}`)}>View</Button>

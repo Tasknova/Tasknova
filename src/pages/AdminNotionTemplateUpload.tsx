@@ -8,23 +8,16 @@ import Navbar from '@/components/ui/navbar';
 const imageFields = [
   { name: 'cover_photo', label: 'Cover Photo' },
   { name: 'face_photo', label: 'Face Photo' },
-  { name: 'image_1', label: 'Image 1' },
-  { name: 'image_2', label: 'Image 2' },
-  { name: 'image_3', label: 'Image 3' },
-  { name: 'image_4', label: 'Image 4' },
 ];
 
 const AdminNotionTemplateUpload: React.FC = () => {
   const [form, setForm] = useState({
     template_name: '',
+    short_description: '',
     template_description: '',
     price_usd: '',
     cover_photo: null as File | null,
     face_photo: null as File | null,
-    image_1: null as File | null,
-    image_2: null as File | null,
-    image_3: null as File | null,
-    image_4: null as File | null,
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -61,27 +54,21 @@ const AdminNotionTemplateUpload: React.FC = () => {
       // Insert into table
       const { error: insertError } = await supabase.from('notion_templates').insert({
         template_name: form.template_name,
+        short_description: form.short_description,
         template_description: form.template_description,
         price_usd: Number(form.price_usd),
         cover_photo: imagePaths.cover_photo,
         face_photo: imagePaths.face_photo,
-        image_1: imagePaths.image_1,
-        image_2: imagePaths.image_2,
-        image_3: imagePaths.image_3,
-        image_4: imagePaths.image_4,
       });
       if (insertError) throw insertError;
       setMessage('Template added successfully!');
       setForm({
         template_name: '',
+        short_description: '',
         template_description: '',
         price_usd: '',
         cover_photo: null,
         face_photo: null,
-        image_1: null,
-        image_2: null,
-        image_3: null,
-        image_4: null,
       });
     } catch (err: any) {
       setMessage('Error: ' + err.message);
@@ -103,6 +90,11 @@ const AdminNotionTemplateUpload: React.FC = () => {
               <div>
                 <label className="block font-medium mb-1">Template Name</label>
                 <Input name="template_name" value={form.template_name} onChange={handleChange} required />
+              </div>
+              <div>
+                <label className="block font-medium mb-1">Short Description</label>
+                <Input name="short_description" value={form.short_description} onChange={handleChange} required maxLength={120} />
+                <div className="text-xs text-gray-400">A brief summary (max 120 chars) for the templates page.</div>
               </div>
               <div>
                 <label className="block font-medium mb-1">Template Description</label>

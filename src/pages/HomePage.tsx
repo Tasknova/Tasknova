@@ -39,7 +39,7 @@ const HomePage = () => {
       <Navbar />
       <div className="container mx-auto p-4">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">Tasknova Home</h1>
+          <h1 className="text-4xl font-bold">Tasknova Market Place</h1>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <Card onClick={() => navigate('/lead-generation')} className="cursor-pointer hover:shadow-lg transition-shadow">
@@ -116,6 +116,7 @@ const HomePage = () => {
           </Card>
         </div>
       </div>
+      <footer className="mt-12 text-center text-gray-400">&copy; {new Date().getFullYear()} Tasknova</footer>
     </>
   );
 };
