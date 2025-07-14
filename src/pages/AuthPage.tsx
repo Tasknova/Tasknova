@@ -1,11 +1,11 @@
 import React from 'react';
 import AuthForm from '@/components/auth/AuthForm';
-import Navbar from '@/components/ui/navbar';
+// import Navbar from '@/components/ui/navbar';
 
 const AuthPage: React.FC = () => {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <AuthForm />
     </>
   );
