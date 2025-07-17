@@ -187,11 +187,23 @@ const AuthForm: React.FC = () => {
     const exists = await checkUserExists(googleEmail);
     if (googleIntent === 'signin') {
       if (!exists) {
+        // Instead of showing error, proceed with Google signup
         setIsLoading(false);
         setShowGoogleDialog(false);
-        toast({ title: 'Account not found', description: 'No account found. Please sign up first.', variant: 'destructive' });
         setAuthMode('signup');
         setEmailForm({ email: googleEmail, password: '', confirmPassword: '', fullName: '' });
+        // Proceed with Google OAuth for signup
+        try {
+          const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: { redirectTo: `${window.location.origin}/` }
+          });
+          if (error) throw error;
+        } catch (error: any) {
+          toast({ title: 'Google authentication failed', description: error.message, variant: 'destructive' });
+        } finally {
+          setIsLoading(false);
+        }
         return;
       }
     } else {
