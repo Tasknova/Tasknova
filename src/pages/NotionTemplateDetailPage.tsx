@@ -86,7 +86,7 @@ const NotionTemplateDetailPage: React.FC = () => {
               <img
                 src="/logo.png"
                 alt="Logo"
-                className="w-16 h-16 rounded-full border-2 border-gray-200 object-cover bg-white shadow"
+                className="w-28 h-28 rounded-full border-2 border-gray-200 object-cover bg-white shadow"
               />
               <div>
                 <h1 className="text-3xl font-bold leading-tight">{template.template_name}</h1>
@@ -110,7 +110,9 @@ const NotionTemplateDetailPage: React.FC = () => {
               <button className="w-full px-6 py-2 bg-black text-white rounded-lg font-semibold text-lg hover:bg-gray-900 transition mb-2">
                 Get template (${template.price_usd})
               </button>
-              <h2 className="text-lg font-bold w-full mb-2">Features & Benefits</h2>
+              <div className="w-full bg-white rounded-lg shadow px-6 py-3 mb-2 flex items-center justify-center">
+                <h2 className="text-xl font-bold w-full text-center">Features & Benefits</h2>
+              </div>
             </div>
             
             <div className="mt-6 text-gray-700 whitespace-pre-line">
