@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import Navbar from '@/components/ui/navbar';
+import { FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa';
 
 type Template = {
   template_id: string;
@@ -105,9 +106,9 @@ const NotionTemplateDetailPage: React.FC = () => {
           </div>
           {/* Right: Features/benefits (sidebar) */}
           <aside className="w-full md:w-96 flex-shrink-0 bg-gray-50 rounded-lg p-6 shadow h-fit">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold">Features & Benefits</h2>
-              <button className="px-6 py-2 bg-black text-white rounded-lg font-semibold text-lg hover:bg-gray-900 transition">
+            <div className="mb-2">
+              <h2 className="text-lg font-bold w-full mb-2">Features & Benefits</h2>
+              <button className="w-full px-6 py-2 bg-black text-white rounded-lg font-semibold text-lg hover:bg-gray-900 transition mb-2">
                 Get template (${template.price_usd})
               </button>
             </div>
@@ -125,26 +126,23 @@ const NotionTemplateDetailPage: React.FC = () => {
                 ))}
               </div>
             )}
-            {/* Social Media Share Buttons */}
-            <div className="mt-6 flex gap-4">
-              <button
-                className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded shadow"
+            {/* Social Media Share Icons */}
+            <div className="mt-6 flex gap-6 justify-center items-center w-full">
+              <FaTwitter
+                className="text-blue-500 hover:text-blue-600 cursor-pointer h-7 w-7"
                 onClick={() => window.open(`https://twitter.com/intent/tweet?text=Check out this Notion template: ${window.location.href}`, '_blank')}
-              >
-                <span>🐦</span> Twitter
-              </button>
-              <button
-                className="flex items-center gap-2 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded shadow"
+                title="Share on Twitter"
+              />
+              <FaFacebook
+                className="text-blue-700 hover:text-blue-800 cursor-pointer h-7 w-7"
                 onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`, '_blank')}
-              >
-                <span>📘</span> Facebook
-              </button>
-              <button
-                className="flex items-center gap-2 px-4 py-2 bg-blue-900 hover:bg-blue-950 text-white rounded shadow"
+                title="Share on Facebook"
+              />
+              <FaLinkedin
+                className="text-blue-900 hover:text-blue-950 cursor-pointer h-7 w-7"
                 onClick={() => window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${window.location.href}`, '_blank')}
-              >
-                <span>💼</span> LinkedIn
-              </button>
+                title="Share on LinkedIn"
+              />
             </div>
           </aside>
         </div>

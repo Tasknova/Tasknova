@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Mail, Eye, EyeOff, Upload, User } from 'lucide-react';
+import { Loader2, Mail, Eye, EyeOff, Upload, User, Home as HomeIcon } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 const AuthForm: React.FC = () => {
@@ -190,25 +190,25 @@ const AuthForm: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md relative">
+        <a
+          href="https://tasknova.io"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute top-4 right-4"
+          aria-label="Go to Tasknova Home"
+        >
+          <Button variant="ghost" size="icon" className="rounded-full">
+            <HomeIcon className="h-6 w-6" />
+          </Button>
+        </a>
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">
-            {authMode === 'signup' ? 'Signup to Task Nova' : 'Welcome'}
+          <CardTitle className="text-3xl font-bold">
+            {authMode === 'signup' ? 'SignUp' : 'LogIn'}
           </CardTitle>
-          <CardDescription>
-            {authMode === 'signin' ? 'Sign in to your account' : 'Create your Task Nova account'}
-          </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="w-full">
-              <TabsTrigger value="email" className="flex items-center gap-2 w-full justify-center">
-                <Mail className="h-4 w-4" />
-                Email
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="email" className="space-y-4">
+          <div className="space-y-4">
               {authMode === 'signup' && (
                 <>
                   <div className="space-y-2">
@@ -346,8 +346,7 @@ const AuthForm: React.FC = () => {
                   }
                 </Button>
               </div>
-            </TabsContent>
-          </Tabs>
+          </div>
 
           {/* Google Auth Buttons */}
           {authMode === 'signup' ? (
