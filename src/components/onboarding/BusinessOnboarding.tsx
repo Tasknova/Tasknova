@@ -154,10 +154,24 @@ const BusinessOnboarding: React.FC = () => {
 
       // Clear saved form data
       localStorage.removeItem('business-onboarding-form');
-      // Force session refresh and log session after onboarding
-      const sessionResult = await supabase.auth.getSession();
-      console.log('Navigating to /home after onboarding, session:', sessionResult);
-      navigate('/home');
+
+      // Wait a moment and refetch business profile to ensure it's available for AuthGuard
+      await new Promise(res => setTimeout(res, 700));
+      const { data: profileCheck } = await supabase
+        .from('business_profiles')
+        .select('user_id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (!profileCheck) {
+        toast({ title: 'Profile not found after onboarding', description: 'Please try again.', variant: 'destructive' });
+        setIsLoading(false);
+        return;
+      }
+
+      // Force session refresh
+      await supabase.auth.getSession();
+      // Optionally reload the page to ensure state is synced
+      window.location.href = '/home';
       return;
     } catch (error: any) {
       toast({
