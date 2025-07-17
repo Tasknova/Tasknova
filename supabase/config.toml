@@ -17,8 +17,15 @@ port = 54323
 # This is the local JWT secret. DO NOT use this in production.
 jwt_secret = "super-secret-jwt-token-with-at-least-32-characters-long"
 enabled = true
-site_url = "http://localhost:3000"
-additional_redirect_urls = ["https://auth-flow-onboard.lovable.app/**", "https://id-preview--85f4d502-ff6a-4f85-81e8-4e7d58cbdf80.lovable.app/**", "https://preview--auth-flow-onboard.lovable.app/**", "http://localhost:8000"]
+site_url = "https://tasknova-f8e6-inky.vercel.app"
+additional_redirect_urls = [
+  "https://tasknova-f8e6-inky.vercel.app",
+  "https://auth-flow-onboard.lovable.app/**",
+  "https://id-preview--85f4d502-ff6a-4f85-81e8-4e7d58cbdf80.lovable.app/**",
+  "https://preview--auth-flow-onboard.lovable.app/**",
+  "http://localhost:8000",
+  "http://localhost:3000"
+]
 jwt_expiry = 3600
 enable_refresh_token_rotation = true
 refresh_token_reuse_interval = 10
