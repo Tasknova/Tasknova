@@ -98,12 +98,12 @@ const BusinessOnboarding: React.FC = () => {
 
       // Clear saved form data
       localStorage.removeItem('business-onboarding-form');
-      
-      setIsSubmitted(true);
       toast({
         title: "Profile created!",
         description: "Your business profile has been saved successfully.",
       });
+      navigate('/home');
+      return;
     } catch (error: any) {
       toast({
         title: "Submission failed",
@@ -121,30 +121,6 @@ const BusinessOnboarding: React.FC = () => {
   };
 
   const isFormValid = formData.businessName && formData.industry && formData.role && formData.referralSources.length > 0;
-
-  if (isSubmitted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-100 p-4">
-        <Card className="w-full max-w-md text-center">
-          <CardHeader>
-            <CardTitle className="text-2xl text-green-700">Welcome aboard! 🎉</CardTitle>
-            <CardDescription>
-              Your business profile has been created successfully.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Button onClick={() => navigate('/home')} className="w-full">
-              Go to Home
-            </Button>
-            <Button onClick={handleSignOut} variant="outline" className="w-full">
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   if (!user) {
     return (
