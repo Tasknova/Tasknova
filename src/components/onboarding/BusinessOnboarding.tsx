@@ -106,7 +106,7 @@ const BusinessOnboarding: React.FC = () => {
 
   const validatePhone = (phone: string) => {
     if (!phone) return 'Phone number is required.';
-    if (!/^[0-9]{7,15}$/.test(phone)) return 'Enter a valid phone number (7-15 digits).';
+    if (!/^[0-9]{10}$/.test(phone)) return 'Enter a valid 10-digit phone number.';
     return '';
   };
 
@@ -154,10 +154,6 @@ const BusinessOnboarding: React.FC = () => {
 
       // Clear saved form data
       localStorage.removeItem('business-onboarding-form');
-      toast({
-        title: "Profile created!",
-        description: "Your business profile has been saved successfully.",
-      });
       navigate('/home');
       return;
     } catch (error: any) {
