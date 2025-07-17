@@ -171,7 +171,10 @@ const LeadGenerationPage = () => {
             {submitted ? (
               <div className="p-8 text-center bg-white rounded-lg shadow">
                 <h2 className="text-2xl font-semibold mb-4">Thank you!</h2>
-                <p className="text-lg">Please wait while we generate your leads.<br/>The leads will be sent to your email. It may take upto 25 to 30 mins to generate the leads</p>
+                <p className="text-lg">
+                  Please wait while we generate your leads.<br/>
+                  The leads will be sent to your email. It may take upto 25 to 30 mins to generate the leads
+                </p>
                 <div className="mt-6 flex justify-center">
                   <Button asChild className="px-6 py-2 text-base font-semibold rounded-full">
                     <a href="/orders">Your Orders</a>

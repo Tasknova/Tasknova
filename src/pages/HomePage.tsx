@@ -69,7 +69,7 @@ const HomePage = () => {
           <Card onClick={() => navigate('/notion-templates')} className="cursor-pointer hover:shadow-lg transition-shadow">
             <CardHeader>
               <img src="/placeholder.svg" alt="Placeholder 3" className="rounded-t-lg" />
-              <CardTitle>📚 Notion Templates – Plug & Play Productivity</CardTitle>
+              <CardTitle>📚 Notion Templates – Plug & Play Productivity Tools</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription>

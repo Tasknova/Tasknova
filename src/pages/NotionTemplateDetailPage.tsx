@@ -107,10 +107,10 @@ const NotionTemplateDetailPage: React.FC = () => {
           {/* Right: Features/benefits (sidebar) */}
           <aside className="w-full md:w-96 flex-shrink-0 bg-gray-50 rounded-lg p-6 shadow h-fit">
             <div className="mb-2">
-              <h2 className="text-lg font-bold w-full mb-2">Features & Benefits</h2>
               <button className="w-full px-6 py-2 bg-black text-white rounded-lg font-semibold text-lg hover:bg-gray-900 transition mb-2">
                 Get template (${template.price_usd})
               </button>
+              <h2 className="text-lg font-bold w-full mb-2">Features & Benefits</h2>
             </div>
             
             <div className="mt-6 text-gray-700 whitespace-pre-line">

@@ -18,6 +18,30 @@ type IndustryType = Database['public']['Enums']['industry_type'];
 type RoleType = Database['public']['Enums']['role_type'];
 type ReferralSource = Database['public']['Enums']['referral_source'];
 
+// Add country codes for dropdown
+const countryCodes = [
+  { code: '+1', label: 'US/Canada (+1)' },
+  { code: '+91', label: 'India (+91)' },
+  { code: '+44', label: 'UK (+44)' },
+  { code: '+61', label: 'Australia (+61)' },
+  { code: '+81', label: 'Japan (+81)' },
+  { code: '+49', label: 'Germany (+49)' },
+  { code: '+33', label: 'France (+33)' },
+  { code: '+86', label: 'China (+86)' },
+  { code: '+971', label: 'UAE (+971)' },
+  { code: '+7', label: 'Russia (+7)' },
+  { code: '+55', label: 'Brazil (+55)' },
+  { code: '+27', label: 'South Africa (+27)' },
+  { code: '+34', label: 'Spain (+34)' },
+  { code: '+39', label: 'Italy (+39)' },
+  { code: '+82', label: 'South Korea (+82)' },
+  { code: '+65', label: 'Singapore (+65)' },
+  { code: '+62', label: 'Indonesia (+62)' },
+  { code: '+234', label: 'Nigeria (+234)' },
+  { code: '+880', label: 'Bangladesh (+880)' },
+  { code: '+92', label: 'Pakistan (+92)' },
+];
+
 interface BusinessFormData {
   businessName: string;
   industry: IndustryType | '';
@@ -25,6 +49,8 @@ interface BusinessFormData {
   referralSources: ReferralSource[];
   employeeCount: number;
   businessGoal: string;
+  countryCode: string;
+  phoneNo: string;
 }
 
 const BusinessOnboarding: React.FC = () => {
@@ -40,7 +66,9 @@ const BusinessOnboarding: React.FC = () => {
     role: '',
     referralSources: [],
     employeeCount: 1,
-    businessGoal: ''
+    businessGoal: '',
+    countryCode: '+1',
+    phoneNo: '',
   });
 
   // Load form data from localStorage on mount
@@ -91,7 +119,8 @@ const BusinessOnboarding: React.FC = () => {
           role: formData.role as RoleType,
           referral_sources: formData.referralSources,
           employee_count: formData.employeeCount,
-          business_goal: formData.businessGoal || null
+          business_goal: formData.businessGoal || null,
+          phone_no: `${formData.countryCode}${formData.phoneNo}`,
         });
 
       if (error) throw error;
@@ -288,6 +317,32 @@ const BusinessOnboarding: React.FC = () => {
                 />
               </div>
 
+              {/* Phone Number */}
+              <div className="space-y-2">
+                <Label htmlFor="phoneNo">Phone Number</Label>
+                <div className="flex gap-2">
+                  <select
+                    id="countryCode"
+                    value={formData.countryCode}
+                    onChange={e => setFormData(prev => ({ ...prev, countryCode: e.target.value }))}
+                    className="border rounded px-2 py-2 bg-white"
+                    style={{ minWidth: 110 }}
+                  >
+                    {countryCodes.map(c => (
+                      <option key={c.code} value={c.code}>{c.label}</option>
+                    ))}
+                  </select>
+                  <Input
+                    id="phoneNo"
+                    type="tel"
+                    placeholder="Enter phone number"
+                    value={formData.phoneNo}
+                    onChange={e => setFormData(prev => ({ ...prev, phoneNo: e.target.value }))}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+
               <Button
                 type="submit"
                 className="w-full"
@@ -311,3 +366,6 @@ const BusinessOnboarding: React.FC = () => {
 };
 
 export default BusinessOnboarding;
+
+// SQL to add phone_no column:
+// ALTER TABLE business_profiles ADD COLUMN phone_no VARCHAR(32);
