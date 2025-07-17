@@ -59,6 +59,8 @@ const BusinessOnboarding: React.FC = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
+  const [phoneError, setPhoneError] = useState<string>('');
+  const [phoneVerified, setPhoneVerified] = useState<boolean>(false);
 
   const [formData, setFormData] = useState<BusinessFormData>({
     businessName: '',
@@ -102,9 +104,34 @@ const BusinessOnboarding: React.FC = () => {
     }));
   };
 
+  const validatePhone = (phone: string) => {
+    if (!phone) return 'Phone number is required.';
+    if (!/^[0-9]{7,15}$/.test(phone)) return 'Enter a valid phone number (7-15 digits).';
+    return '';
+  };
+
+  const handleVerifyPhone = () => {
+    const err = validatePhone(formData.phoneNo);
+    setPhoneError(err);
+    if (!err) {
+      setPhoneVerified(true);
+      toast({ title: 'Phone Verified', description: 'Phone verification is not implemented in this demo.', variant: 'default' });
+    } else {
+      setPhoneVerified(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+
+    // Validate phone before submit
+    const err = validatePhone(formData.phoneNo);
+    setPhoneError(err);
+    if (err) {
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -320,7 +347,7 @@ const BusinessOnboarding: React.FC = () => {
               {/* Phone Number */}
               <div className="space-y-2">
                 <Label htmlFor="phoneNo">Phone Number</Label>
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
                   <select
                     id="countryCode"
                     value={formData.countryCode}
@@ -337,10 +364,17 @@ const BusinessOnboarding: React.FC = () => {
                     type="tel"
                     placeholder="Enter phone number"
                     value={formData.phoneNo}
-                    onChange={e => setFormData(prev => ({ ...prev, phoneNo: e.target.value }))}
+                    onChange={e => {
+                      setFormData(prev => ({ ...prev, phoneNo: e.target.value }));
+                      setPhoneVerified(false);
+                    }}
                     className="flex-1"
                   />
+                  <Button type="button" variant={phoneVerified ? 'default' : 'outline'} size="sm" onClick={handleVerifyPhone}>
+                    {phoneVerified ? 'Verified' : 'Verify'}
+                  </Button>
                 </div>
+                {phoneError && <div className="text-red-500 text-sm mt-1">{phoneError}</div>}
               </div>
 
               <Button
