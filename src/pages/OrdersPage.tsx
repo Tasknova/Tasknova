@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/ui/navbar';
 import type { Database } from '@/integrations/supabase/types';
+import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
 
 // Types
 // These should match your Supabase types
@@ -57,15 +58,35 @@ const OrdersPage: React.FC = () => {
                       <p className="text-sm text-gray-500">
                         Requested on: {new Date(request.created_at).toLocaleString()}
                       </p>
-                      {request.status?.toLowerCase().startsWith('failed') ? (
-                        <p className="text-sm text-red-500">
-                          Status: Failed. Our team will connect with you.
-                        </p>
-                      ) : (
-                        <p className="text-sm text-gray-500 capitalize">
-                          Status: {request.status || 'Pending'}
-                        </p>
-                      )}
+                      {/* Status display with color and icon */}
+                      {(() => {
+                        const status = (request.status || '').toLowerCase();
+                        if (status === 'running') {
+                          return (
+                            <span className="flex items-center gap-1 text-blue-600 font-medium">
+                              <Loader2 className="h-4 w-4 animate-spin mr-1" /> Running
+                            </span>
+                          );
+                        } else if (status === 'completed') {
+                          return (
+                            <span className="flex items-center gap-1 text-green-600 font-medium">
+                              <CheckCircle2 className="h-4 w-4 mr-1" /> Completed
+                            </span>
+                          );
+                        } else if (status.startsWith('failed') || status === 'error') {
+                          return (
+                            <span className="flex items-center gap-1 text-red-600 font-medium">
+                              <XCircle className="h-4 w-4 mr-1" /> Error. Our team will connect with you.
+                            </span>
+                          );
+                        } else {
+                          return (
+                            <span className="flex items-center gap-1 text-gray-500 font-medium">
+                              Status: {request.status || 'Pending'}
+                            </span>
+                          );
+                        }
+                      })()}
                     </div>
                     {request.downloadable_url && (
                       <Button asChild>
