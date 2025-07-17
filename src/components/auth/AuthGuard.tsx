@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import type { Session } from '@supabase/supabase-js';
 import { useToast } from '@/hooks/use-toast';
@@ -14,6 +14,7 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [hasBusinessProfile, setHasBusinessProfile] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -106,6 +107,27 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
     };
     createProfileIfNeeded();
   }, [session]);
+
+  useEffect(() => {
+    const checkGoogleSignupUserExists = async () => {
+      if (!session) return;
+      if (session.user.app_metadata?.provider !== 'google') return;
+      // Only run this logic if on onboarding or signup page
+      if (location.pathname !== '/onboarding' && location.pathname !== '/auth') return;
+      // Check if user exists in business_profiles
+      const { data, error } = await supabase
+        .from('business_profiles')
+        .select('user_id')
+        .eq('user_id', session.user.id)
+        .maybeSingle();
+      const exists = !!data;
+      if (exists) {
+        await supabase.auth.signOut();
+        navigate('/auth?msg=User%20exists%2C%20please%20log-in', { replace: true });
+      }
+    };
+    checkGoogleSignupUserExists();
+  }, [session, location.pathname, navigate]);
 
   if (loading) {
     return (
