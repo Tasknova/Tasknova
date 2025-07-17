@@ -299,7 +299,7 @@ const AuthForm: React.FC = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">
-            {authMode === 'signup' ? 'Signup to Task Nova' : 'Welcome'}
+            {authMode === 'signup' ? 'Signup to Task Nova' : 'Welcome you'}
           </CardTitle>
           <CardDescription>
             {authMode === 'signin' ? 'Sign in to your account' : 'Create your Task Nova account'}
