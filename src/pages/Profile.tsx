@@ -278,6 +278,13 @@ const ProfilePage: React.FC = () => {
                         </div>
                       </div>
                       <div className="flex items-start space-x-3 bg-gray-50 p-4 rounded-lg">
+                        <Home className="h-5 w-5 text-primary mt-1" />
+                        <div>
+                          <p className="font-semibold text-gray-500">Phone Number</p>
+                          <p className="text-gray-800">{businessProfile.phone_no || 'N/A'}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-3 bg-gray-50 p-4 rounded-lg">
                         <Users className="h-5 w-5 text-primary mt-1" />
                         <div>
                           <p className="font-semibold text-gray-500">Your Role</p>
