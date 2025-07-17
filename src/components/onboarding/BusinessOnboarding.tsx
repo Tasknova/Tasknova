@@ -105,7 +105,7 @@ const BusinessOnboarding: React.FC = () => {
   };
 
   const validatePhone = (phone: string) => {
-    if (!phone) return 'Phone number is required.';
+    if (!phone || phone.trim() === '') return 'Phone number is required.';
     if (!/^[0-9]{10}$/.test(phone)) return 'Enter a valid 10-digit phone number.';
     return '';
   };
@@ -189,7 +189,7 @@ const BusinessOnboarding: React.FC = () => {
     localStorage.removeItem('business-onboarding-form');
   };
 
-  const isFormValid = formData.businessName && formData.industry && formData.role && formData.referralSources.length > 0;
+  const isFormValid = formData.businessName && formData.industry && formData.role && formData.referralSources.length > 0 && !validatePhone(formData.phoneNo);
 
   if (!user) {
     return (
@@ -357,9 +357,9 @@ const BusinessOnboarding: React.FC = () => {
                 />
               </div>
 
-              {/* Phone Number */}
+              {/* Phone Number (Required) */}
               <div className="space-y-2">
-                <Label htmlFor="phoneNo">Phone Number</Label>
+                <Label htmlFor="phoneNo">Phone Number <span className="text-red-500">*</span></Label>
                 <div className="flex gap-2 items-center">
                   <select
                     id="countryCode"
@@ -375,13 +375,14 @@ const BusinessOnboarding: React.FC = () => {
                   <Input
                     id="phoneNo"
                     type="tel"
-                    placeholder="Enter phone number"
+                    placeholder="Enter 10-digit phone number"
                     value={formData.phoneNo}
                     onChange={e => {
                       setFormData(prev => ({ ...prev, phoneNo: e.target.value }));
                       setPhoneVerified(false);
                     }}
                     className="flex-1"
+                    required
                   />
                   <Button type="button" variant={phoneVerified ? 'default' : 'outline'} size="sm" onClick={handleVerifyPhone}>
                     {phoneVerified ? 'Verified' : 'Verify'}

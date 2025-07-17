@@ -278,7 +278,7 @@ const ProfilePage: React.FC = () => {
                         </div>
                       </div>
                       <div className="flex items-start space-x-3 bg-gray-50 p-4 rounded-lg">
-                        <Home className="h-5 w-5 text-primary mt-1" />
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm0 12a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2zm12-12a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zm0 12a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 01-8 0" /></svg>
                         <div>
                           <p className="font-semibold text-gray-500">Phone Number</p>
                           <p className="text-gray-800">{businessProfile.phone_no || 'N/A'}</p>
