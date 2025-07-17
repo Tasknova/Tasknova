@@ -45,7 +45,7 @@ const Navbar: React.FC = () => {
     <nav className="w-full bg-white border-b shadow-sm mb-6">
       <div className="container mx-auto flex items-center gap-4 py-1 px-4">
         <Link to="/home" className="mr-4 flex items-center">
-          <img src="/logo2.jpg" alt="Logo" className="w-16 h-16 object-contain" />
+          <img src="/logo2.jpg" alt="Logo" className="w-32 h-20 object-contain" />
         </Link>
         {navLinks.filter(link => link.to !== '/orders').map(link => (
           <Link

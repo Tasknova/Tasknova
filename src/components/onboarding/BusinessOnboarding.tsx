@@ -154,6 +154,9 @@ const BusinessOnboarding: React.FC = () => {
 
       // Clear saved form data
       localStorage.removeItem('business-onboarding-form');
+      // Force session refresh and log session after onboarding
+      const sessionResult = await supabase.auth.getSession();
+      console.log('Navigating to /home after onboarding, session:', sessionResult);
       navigate('/home');
       return;
     } catch (error: any) {
